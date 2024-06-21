@@ -19,3 +19,14 @@ export const current = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const countUsers = async (req, res, next) => {
+  try {
+    const count = await User.count();
+    res.json({ count });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  } 
+}
