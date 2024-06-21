@@ -1,40 +1,44 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import mongoose from "mongoose";
-import path from "path";
-import { createFolderIsNotExist } from "./helpers/upload.js";
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import path from 'path';
 
-import authRouter from "./routes/authRouter.js";
-import usersRouter from "./routes/usersRouter.js";
-import watersRouter from "./routes/watersRouter.js";
+import { createFolderIsNotExist } from './helpers/upload.js';
+
+import auth from './middlewares/authenticate.js';
+
+import authRouter from './routes/authRouter.js';
+import usersRouter from './routes/usersRouter.js';
+import watersRouter from './routes/watersRouter.js';
 
 import swaggerUi from 'swagger-ui-express';
 
-import swaggerDocument from './openapi.json' assert { type: "json" };
+import swaggerDocument from './openapi.json' assert { type: 'json' };
 
-const uploadDir = path.join(process.cwd(), "tmp");
-const storeAvatar = path.join(process.cwd(), "public", "avatars");
+const uploadDir = path.join(process.cwd(), 'tmp');
+const storeAvatar = path.join(process.cwd(), 'public', 'avatars');
 
 const app = express();
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(morgan("tiny"));
+app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-app.use("/api/auth", authRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/water", watersRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/water', auth, watersRouter);
 
 app.use((_, res) => {
-  res.status(404).json({ message: "Route not found" });
+  res.status(404).json({ message: 'Route not found' });
 });
 
 app.use((err, _, res, __) => {
-  const { status = 500, message = "Internal server error" } = err;
+  console.log(err);
+  const { status = 500, message = 'Internal server error' } = err;
   res.status(status).json({ message });
 });
 
@@ -51,9 +55,9 @@ connection
       console.log(`Database connection successful`);
     });
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(`Server not running. Error message: ${err.message}`);
     process.exit(1);
   });
 
-  export default app;
+export default app;
