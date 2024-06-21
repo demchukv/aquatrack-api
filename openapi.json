@@ -72,11 +72,11 @@
               }
             }
           },
-          "409": {
-            "description": "Email in use!"
-          },
           "400": {
             "description": "Validation exception"
+          },
+          "409": {
+            "description": "Email in use!"
           }
         }
       }
@@ -106,7 +106,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/baseUser"
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
