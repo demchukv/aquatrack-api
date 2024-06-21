@@ -8,7 +8,7 @@ externalDocs:
   description: AquaTrack
   url: https://veronikapetrushka.github.io/fullstack-foundry/
 servers:
-  - url: https://aquatrack-api-myzh.onrender.com//api/
+  - url: https://aquatrack-api-myzh.onrender.com/api/
 tags:
   - name: auth
     description: register, login and logout
