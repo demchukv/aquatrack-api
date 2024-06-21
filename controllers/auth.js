@@ -33,6 +33,7 @@ const register = async (req, res, next) => {
     await sendEmail(verifyEmailData);
 
     res.status(201).send({ user: { email: newUser.email } });
+    
   } catch (error) {
     console.log(error);
     next(error);
