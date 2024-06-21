@@ -11,10 +11,14 @@
   },
   "servers": [
     {
-      "url": "https://WILL_BE_API_DOMAIN/api/"
+      "url": "https://aquatrack-api-myzh.onrender.com/api/"
     }
   ],
   "tags": [
+    {
+      "name": "auth",
+      "description": "register, login and logout"
+    },
     {
       "name": "users",
       "description": "Operations about user"
@@ -25,24 +29,36 @@
     }
   ],
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
         "tags": [
-          "users"
+          "auth"
         ],
         "summary": "Add a new user",
         "description": "Add a new user",
         "operationId": "register",
         "requestBody": {
           "description": "Create a new user",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/baseUser"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "yourname@mail.com"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "repeatPassword": {
+                    "type": "string"
+                  }
+                }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
@@ -50,24 +66,29 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/baseUser"
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
           },
-          "401": {
-            "description": "Email in use!"
+          "400": {
+            "description": "Validation exception"
           },
           "409": {
-            "description": "Validation exception"
+            "description": "Email in use!"
           }
         }
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
         "tags": [
-          "users"
+          "auth"
         ],
         "summary": "Logs user into the system",
         "description": "",
@@ -89,7 +110,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/baseUser"
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -100,10 +134,10 @@
         }
       }
     },
-    "/users/logout": {
+    "/auth/logout": {
       "post": {
         "tags": [
-          "users"
+          "auth"
         ],
         "summary": "Logs out current logged in user session",
         "description": "",
@@ -116,6 +150,122 @@
         "responses": {
           "204": {
             "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/auth/verify": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Resend verification email",
+        "description": "",
+        "operationId": "verifyResend",
+        "requestBody": {
+          "description": "User email",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Verification email sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/auth/verify/{verificationToken}": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Verify user email",
+        "description": "",
+        "operationId": "verify",
+        "parameters": [
+          {
+            "name": "verificationToken",
+            "in": "path",
+            "description": "Verification token sended in email",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email verified"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/users/count-users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "return total registered users",
+        "description": "",
+        "operationId": "countUsers",
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalUsers": {
+                      "type": "integer",
+                      "example": 120
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

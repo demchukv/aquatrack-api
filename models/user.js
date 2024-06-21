@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-import Joi from "joi";
+import mongoose from 'mongoose';
+import Joi from 'joi';
+import gravatar from 'gravatar';
 
 export const registerSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -14,6 +15,10 @@ export const loginSchema = Joi.object({
 
 export const emailSchema = Joi.object({
   email: Joi.string().email().required(),
+});
+
+export const userValidateVerifyEmail = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
 });
 
 const userSchema = new mongoose.Schema(
@@ -50,5 +55,9 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+userSchema.methods.setAvatarURL = async function (email) {
+  this.avatar = await gravatar.url(email, { s: '100' });
+};
 
 export const User = mongoose.model('User', userSchema);

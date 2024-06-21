@@ -53,6 +53,8 @@ connection
       createFolderIsNotExist(uploadDir);
       createFolderIsNotExist(storeAvatar);
       console.log(`Database connection successful`);
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Swagger UI is available at ${process.env.BASE_URI}/api-docs`);
     });
   })
   .catch(err => {
