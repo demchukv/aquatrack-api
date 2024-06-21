@@ -1,15 +1,13 @@
 import { v2 as cloudinary } from 'cloudinary';
 import HttpError from '../middlewares/HttpError.js';
 
-
 /**
  * Uploads an image to Cloudinary.
  *
  * @param {string} imagePath - The path of the image to upload
  * @return {string} The secure URL of the uploaded image
  */
-const CloudinaryUploadImage = async (imagePath) => {
-
+const CloudinaryUploadImage = async imagePath => {
   const options = {
     use_filename: true,
     unique_filename: false,
@@ -18,15 +16,14 @@ const CloudinaryUploadImage = async (imagePath) => {
 
   try {
     const result = await cloudinary.uploader.upload(imagePath, options);
-    console.log(result);
     return result.secure_url;
   } catch (error) {
-    //console.error(error);
-    throw HttpError(500, 'Cloudinary upload image error');}
+    console.error(error);
+    throw HttpError(500, 'Cloudinary upload image error');
+  }
 };
 
 export default CloudinaryUploadImage;
-
 
 /*
 response object from cloudinary:

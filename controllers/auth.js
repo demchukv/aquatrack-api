@@ -79,54 +79,52 @@ const logOut = async (req, res, next) => {
   }
 };
 
-
 const verifyEmail = async (req, res, next) => {
-    const { verificationToken } = req.params;
-    const user = await User.findOne({verificationToken: verificationToken});
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-    try {
-      await User.findByIdAndUpdate(user._id, {
-        verify: true,
-        verificationToken: null,
-      });
-      res.json({
-        message: "Verification successful",
-      });
-    } catch (error) {
-      console.error(error);
-      next(error);
-    }
-  };
-  
-  const resendVerifyEmail = async (req, res, next) => {
-    const { email } = req.body;
-    const user = await User.findOne({email});
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-  
-    if (user.verify) {
-      return res.status(400).json({
-        message: "Verification has already been passed",
-      });
-    }
-  
-    const verifyEmailData = {
-      to: user.email,
-      subject: "Verify email",
-      html: `<h1>Please verify your email</h1><p><a target="_blank" href="${process.env.BASE_URI}/api/auth/verify/${user.verificationToken}">Click verify email</a></p>`,
-    };
-  
-    await sendEmail(verifyEmailData);
-  
-    res.json({ message: "Verification email sent" });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken: verificationToken });
+  if (!user) {
+    return res.status(404).json({
+      message: 'User not found',
+    });
+  }
+  try {
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+    res.json({
+      message: 'Verification successful',
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+const resendVerifyEmail = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({
+      message: 'User not found',
+    });
+  }
+
+  if (user.verify) {
+    return res.status(400).json({
+      message: 'Verification has already been passed',
+    });
+  }
+
+  const verifyEmailData = {
+    to: user.email,
+    subject: 'Verify email',
+    html: `<h1>Please verify your email</h1><p><a target="_blank" href="${process.env.BASE_URI}/api/auth/verify/${user.verificationToken}">Click verify email</a></p>`,
   };
 
-  
+  await sendEmail(verifyEmailData);
+
+  res.json({ message: 'Verification email sent' });
+};
+
 export { register, logIn, logOut, verifyEmail, resendVerifyEmail };
