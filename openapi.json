@@ -35,14 +35,26 @@
         "operationId": "register",
         "requestBody": {
           "description": "Create a new user",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/baseUser"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "yourname@mail.com"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "repeatPassword": {
+                    "type": "string"
+                  }
+                }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
@@ -50,7 +62,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/baseUser"
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }

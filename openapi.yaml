@@ -24,18 +24,29 @@ paths:
       operationId: register
       requestBody:
         description: Create a new user
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/baseUser'
-        required: true
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "yourname@mail.com"
+                password:
+                  type: string
+                repeatPassword:
+                  type: string
       responses:
         '201':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/baseUser'
+                type: object
+                properties:
+                  email:
+                    type: string
         '401':
           description: Email in use!
         '409':
