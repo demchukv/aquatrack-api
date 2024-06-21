@@ -15,7 +15,7 @@ function auth(req, res, next) {
     return next(HttpError(401, 'Not authorized!'));
   }
 
-  jwt.verify(token, process.env.JWT, async (error, decode) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (error, decode) => {
     if (error) {
       return next(HttpError(401, 'Not authorized!'));
     }
