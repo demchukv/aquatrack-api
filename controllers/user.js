@@ -24,7 +24,7 @@ export const current = async (req, res, next) => {
 export const countUsers = async (req, res, next) => {
   try {
     const count = await User.count();
-    res.json({ count });
+    res.json({ totalUsers: count });
   } catch (error) {
     console.error(error);
     next(error);
