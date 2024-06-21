@@ -1,2 +1,13 @@
+#Junk
+.vscode/
+.idea/
+
 .env
-/node_modules
+node_modules/
+
+pull.txt
+pullrequests.txt
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

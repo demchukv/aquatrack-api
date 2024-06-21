@@ -97,7 +97,7 @@ paths:
           description: successful operation
 components:
   schemas:
-    baseUser:
+    User:
       type: object
       properties:
         email:
