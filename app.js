@@ -4,8 +4,11 @@ import cors from "cors";
 import mongoose from "mongoose";
 import path from "path";
 import { createFolderIsNotExist } from "./helpers/upload.js";
+
+import authRouter from "./routes/authRouter.js";
 import usersRouter from "./routes/usersRouter.js";
-import contactsRouter from "./routes/contactsRouter.js";
+import watersRouter from "./routes/watersRouter.js";
+
 import swaggerUi from 'swagger-ui-express';
 
 import swaggerDocument from './openapi.json' assert { type: "json" };
@@ -22,8 +25,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/api/water", watersRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
@@ -34,7 +38,7 @@ app.use((err, _, res, __) => {
   res.status(status).json({ message });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const uriDb = process.env.DB_HOST;
 
 const connection = mongoose.connect(uriDb);
