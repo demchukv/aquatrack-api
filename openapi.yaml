@@ -8,7 +8,7 @@ externalDocs:
   description: AquaTrack
   url: https://veronikapetrushka.github.io/fullstack-foundry/
 servers:
-  - url: https://sample.swagger.io/api/
+  - url: https://aquatrack-api-myzh.onrender.com//api/
 tags:
   - name: users
     description: Operations about user

@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://WILL_BE_API_DOMAIN/api/"
+      "url": "https://aquatrack-api-myzh.onrender.com//api/"
     }
   ],
   "tags": [
