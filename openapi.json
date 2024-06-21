@@ -72,10 +72,10 @@
               }
             }
           },
-          "401": {
+          "409": {
             "description": "Email in use!"
           },
-          "409": {
+          "400": {
             "description": "Validation exception"
           }
         }

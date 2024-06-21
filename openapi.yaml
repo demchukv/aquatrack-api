@@ -47,9 +47,9 @@ paths:
                 properties:
                   email:
                     type: string
-        '401':
-          description: Email in use!
         '409':
+          description: Email in use!
+        '400':
           description: Validation exception
   /users/login:
     post:
