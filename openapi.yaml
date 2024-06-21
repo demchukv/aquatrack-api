@@ -10,12 +10,14 @@ externalDocs:
 servers:
   - url: https://aquatrack-api-myzh.onrender.com//api/
 tags:
+  - name: auth
+    description: register, login and logout
   - name: users
     description: Operations about user
   - name: water
     description: Record daily water intake and track
 paths:
-  /users/register:
+  /auth/register:
     post:
       tags:
         - users
@@ -51,7 +53,7 @@ paths:
           description: Email in use!
         '400':
           description: Validation exception
-  /users/login:
+  /auth/login:
     post:
       tags:
         - users
@@ -83,7 +85,7 @@ paths:
                       
         '401':
           description: Email or password is wrong!
-  /users/logout:
+  /auth/logout:
     post:
       tags:
         - users
@@ -95,9 +97,27 @@ paths:
       responses:
         '204':
           description: successful operation
+  /users/count-users:
+    get:
+      tags:
+        - users
+      summary: return total registered users
+      description: ''
+      operationId: countUsers
+      responses:
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalUsers:
+                    type: integer
+                    example: 120
 components:
   schemas:
-    User:
+    baseUser:
       type: object
       properties:
         email:

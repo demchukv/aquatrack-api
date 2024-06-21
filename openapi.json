@@ -16,6 +16,10 @@
   ],
   "tags": [
     {
+      "name": "auth",
+      "description": "register, login and logout"
+    },
+    {
       "name": "users",
       "description": "Operations about user"
     },
@@ -25,7 +29,7 @@
     }
   ],
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
         "tags": [
           "users"
@@ -81,7 +85,7 @@
         }
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
         "tags": [
           "users"
@@ -130,7 +134,7 @@
         }
       }
     },
-    "/users/logout": {
+    "/auth/logout": {
       "post": {
         "tags": [
           "users"
@@ -146,6 +150,34 @@
         "responses": {
           "204": {
             "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/users/count-users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "return total registered users",
+        "description": "",
+        "operationId": "countUsers",
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalUsers": {
+                      "type": "integer",
+                      "example": 120
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
