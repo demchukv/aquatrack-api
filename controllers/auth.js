@@ -218,7 +218,7 @@ const googleRedirect = async (req, res, next) => {
     });
     await newUser.save();
   }else{
-    await User.findOneAndUpdate({email}, {googleId})
+    await User.findOneAndUpdate({email}, {displayName: userData.data.name, googleId})
   }
 
   const userDB = await User.findOne({ email });
