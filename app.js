@@ -53,6 +53,7 @@ app.use((err, _, res, __) => {
 
 const PORT = process.env.PORT || 8080;
 const uriDb = process.env.DB_HOST;
+const { CLIENT_ID, CLIENT_SECRET } = process.env
 
 // cookie session ----------------------------------------
 app.use(
@@ -68,23 +69,25 @@ app.use(passport.session())
 
 // passport useage witth google strategy
 passport.use(
-  new GoogleStrategy({
-    clientID:
-      '551233906777-8ccj62cack7s4j2gv6a0o920463t6ld1.apps.googleusercontent.com',
-    clientSecret: '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',
-    callbackURL: '/auth/google/callback',
-  }, async (accessToken, refreshToken, profile, done) => {
-    const existingUser = await User.findOne({ googleId: profile.id})
-    if (existingUser) {
-      return done(null, existingUser)
-    }
+  new GoogleStrategy(
+    {
+      clientID: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if (existingUser) {
+        return done(null, existingUser);
+      }
 
-    const newUser = await new User({
-      googleId: profile.id,
-      displayName: profile.displayName
-    }).save()
-    done(null, newUser)
-  })
+      const newUser = await new User({
+        googleId: profile.id,
+        displayName: profile.displayName,
+      }).save();
+      done(null, newUser);
+    }
+  )
 );
 
 //
