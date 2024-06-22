@@ -15,6 +15,15 @@ import watersRouter from './routes/watersRouter.js';
 import swaggerUi from 'swagger-ui-express';
 
 import swaggerDocument from './openapi.json' assert { type: 'json' };
+import { access } from 'fs';
+import { profile } from 'console';
+
+// google auth --------------------------
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import cookieSession from 'cookie-session';
+import { User } from './models/user.js';
+// --------------------------------------
 
 const uploadDir = path.join(process.cwd(), 'tmp');
 const storeAvatar = path.join(process.cwd(), 'public', 'avatars');
@@ -45,7 +54,64 @@ app.use((err, _, res, __) => {
 const PORT = process.env.PORT || 8080;
 const uriDb = process.env.DB_HOST;
 
-const connection = mongoose.connect(uriDb);
+// cookie session ----------------------------------------
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: ['cookie key'],
+  })
+);
+
+// passport init 
+app.use(passport.initialize())
+app.use(passport.session())
+
+// passport useage witth google strategy
+passport.use(
+  new GoogleStrategy({
+    clientID:
+      '551233906777-8ccj62cack7s4j2gv6a0o920463t6ld1.apps.googleusercontent.com',
+    clientSecret: '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',
+    callbackURL: '/auth/google/callback',
+  }, async (accessToken, refreshToken, profile, done) => {
+    const existingUser = await User.findOne({ googleId: profile.id})
+    if (existingUser) {
+      return done(null, existingUser)
+    }
+
+    const newUser = await new User({
+      googleId: profile.id,
+      displayName: profile.displayName
+    }).save()
+    done(null, newUser)
+  })
+);
+
+//
+passport.serializeUser((user, done) => {
+  done(null, user.id)
+})
+
+passport.deserializeUser(async (id, done) => {
+  const user = await User.findById(id)
+  done(null, user)
+})
+
+// google auth path
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}))
+
+// google callback elaboration path
+app.get('/profile', (req, res) => {
+  res.send(req.user)
+})
+// -------------------------------------------------------
+
+const connection = mongoose.connect(uriDb, {
+  useNewUrlParser: true, // google connection to MongoDB
+  UseUnifiedTopology: true, // google connection to MongoDB
+});
 
 connection
   .then(() => {
