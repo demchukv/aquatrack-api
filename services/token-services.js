@@ -3,7 +3,7 @@ import { RefreshToken } from '../models/token-model.js';
 import { User } from '../models/user.js';
 
 export const generateToken = async (payload) => {
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '3m' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '20m' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
 
     return {
