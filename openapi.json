@@ -280,6 +280,21 @@
         }
       }
     },
+    "/auth/google": {
+      "get": {
+        "tags": [
+          "auth"
+        ]
+      },
+      "summary": "send user to Google for authorization",
+      "description": "",
+      "operationId": "google",
+      "responses": {
+        "302": {
+          "description": "redirect to Google"
+        }
+      }
+    },
     "/users/count-users": {
       "get": {
         "tags": [
