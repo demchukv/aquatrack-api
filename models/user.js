@@ -21,6 +21,15 @@ export const userValidateVerifyEmail = Joi.object({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
 });
 
+export const userValidateProfile = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  name: Joi.string(),
+  gender: Joi.string().valid('male', 'female', ''),
+  weight: Joi.number(),
+  timeActivity: Joi.number(),
+  dailyNorma: Joi.number().required().min(1).max(50000),
+});
+
 const userSchema = new mongoose.Schema(
   {
     password: {

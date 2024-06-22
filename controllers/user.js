@@ -77,3 +77,44 @@ export const updateAvatar = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const updateProfile = async (req, res, next) => {
+  const { id } = req.user;
+  const { email, name = null, gender = null, weight = null, timeActivity = null, dailyNorma } = req.body;
+
+  if (!email || !dailyNorma) {
+    return res.status(400).json({
+      message: 'missing fields',
+    });
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({
+      message: 'User not found',
+    });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, { email, name, gender, weight, timeActivity, dailyNorma }, {
+      new: true,
+    }
+    );
+    res.json({
+      email: updatedUser.email,
+      name: updatedUser.name,
+      avatar: updatedUser.avatar,
+      gender: updatedUser.gender,
+      weight: updatedUser.weight,
+      timeActivity: updatedUser.timeActivity,
+      dailyNorma: updatedUser.dailyNorma,
+      createdAt: updatedUser.createdAt,
+      updatedAt: updatedUser.updatedAt,
+    });
+
+  } catch (error) {
+    console.log(error);
+    next(error);
+  } 
+}
