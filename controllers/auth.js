@@ -174,6 +174,7 @@ const googleRedirect = async (req, res, next) => {
   const urlObj = new URL(fullUrl);
   const urlParams = queryString.parse(urlObj.search);
   const code = urlParams.code;
+console.log("Code: " + code) ;
   const tokenData = await axios({
     url: 'https://oauth2.googleapis.com/token',
     method: 'post',
@@ -188,6 +189,8 @@ const googleRedirect = async (req, res, next) => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
+console.log("Token data:");
+console.log(tokenData.data);
   const userData = await axios({
     url: 'https://www.googleapis.com/oauth2/v2/userinfo',
     method: 'get',
@@ -195,7 +198,8 @@ const googleRedirect = async (req, res, next) => {
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
   });
-
+console.log("User data:");
+console.log(userData)
   /**
    * TODO: Add verification
    * save to database et al.
