@@ -53,7 +53,7 @@ app.use((err, _, res, __) => {
 
 const PORT = process.env.PORT || 8080;
 const uriDb = process.env.DB_HOST;
-const { CLIENT_ID, CLIENT_SECRET } = process.env
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env
 
 // cookie session ----------------------------------------
 app.use(
@@ -71,8 +71,8 @@ app.use(passport.session())
 passport.use(
   new GoogleStrategy(
     {
-      clientID: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
