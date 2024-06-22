@@ -166,7 +166,9 @@ const googleAuth = async (req, res, next) => {
     prompt: 'consent',
   });
 
-  return res.redirect('https://accounts.google.com/o/oauth2/v2/auth?' + stringifiedParams);
+  return res.redirect(
+    'https://accounts.google.com/o/oauth2/v2/auth?' + stringifiedParams
+  );
 };
 
 const googleRedirect = async (req, res, next) => {
@@ -174,7 +176,7 @@ const googleRedirect = async (req, res, next) => {
   const urlObj = new URL(fullUrl);
   const urlParams = queryString.parse(urlObj.search);
   const code = urlParams.code;
-console.log("Code: " + code) ;
+
   const tokenData = await axios({
     url: 'https://oauth2.googleapis.com/token',
     method: 'post',
@@ -189,8 +191,7 @@ console.log("Code: " + code) ;
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
-console.log("Token data:");
-console.log(tokenData.data);
+
   const userData = await axios({
     url: 'https://www.googleapis.com/oauth2/v2/userinfo',
     method: 'get',
@@ -198,14 +199,65 @@ console.log(tokenData.data);
       Authorization: `Bearer ${tokenData.data.access_token}`,
     },
   });
-console.log("User data:");
-console.log(userData)
+
+  const email = userData.data.email;
+  const name = userData.data.given_name;
+  const googleId = userData.data.id;
+  const avatar = userData.data.picture;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    const hashedPassword = await bcrypt.hash(name, 10);
+    const newUser = new User({
+      email,
+      name,
+      password: hashedPassword,
+      avatar,
+      googleId,
+      displayName: userData.data.name,
+    });
+    await newUser.save();
+  }else{
+    await User.findOneAndUpdate({email}, {googleId})
+  }
+
+  const userDB = await User.findOne({ email });
+  const payload = { id: userDB._id, email: userDB.email };
+  const { token, refreshToken } = await tokenServices.generateToken(payload);
+  await tokenServices.saveToken(userDB._id, refreshToken);
+
+  await User.findByIdAndUpdate(userDB._id, { token }, { new: true });
+
+  res.cookie('refreshToken', refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  });
+
+  return res.redirect(
+    `${process.env.FRONTEND_URL}?token=${token}`
+  );
+
   /**
-   * TODO: Add verification
-   * save to database et al.
-   * send to frontend token, not email!
+   *   data: {
+        id: '116374014050993346840',
+        email: 'demchukv@gmail.com',
+        verified_email: true,
+        name: 'Volodymyr Demchuk',
+        given_name: 'Volodymyr',
+        family_name: 'Demchuk',
+        picture: 'https://lh3.googleusercontent.com/a/ACg8ocL6Zx4vL9iqY0wD_Hr1sHYyaPgqXt_RWEIcQNcQ0sUi30HNEJjf6A=s96-c'
+    }
   */
-  return res.redirect(`${process.env.FRONTEND_URL}?email=${userData.data.email}`);
+
 };
 
-export { register, logIn, logOut, verifyEmail, resendVerifyEmail, refresh, googleAuth, googleRedirect };
+export {
+  register,
+  logIn,
+  logOut,
+  verifyEmail,
+  resendVerifyEmail,
+  refresh,
+  googleAuth,
+  googleRedirect,
+};
