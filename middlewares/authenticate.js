@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user.js';
 import HttpError from './HttpError.js';
+import * as tokenServices from '../services/token-services.js';
 
-function auth(req, res, next) {
+async function auth(req, res, next) {
   const authorizationHeader = req.headers.authorization;
 
   if (typeof authorizationHeader !== 'string') {
@@ -15,13 +16,14 @@ function auth(req, res, next) {
     return next(HttpError(401, 'Not authorized!'));
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, async (error, decode) => {
-    if (error) {
-      return next(HttpError(401, 'Not authorized!'));
-    }
+  const userData = tokenServices.validateAccessToken(token);
+
+  if (!userData) {
+    return next(HttpError(401, 'Not authorized!'));
+  }
 
     try {
-      const user = await User.findById(decode.id);
+      const user = await User.findById(userData.id);
 
       if (user === null) {
         return next(HttpError(401, 'Not authorized'));
@@ -37,7 +39,7 @@ function auth(req, res, next) {
     } catch (error) {
       next(error);
     }
-  });
+  
 }
 
 export default auth;
