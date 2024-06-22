@@ -171,6 +171,26 @@ paths:
                   totalUsers:
                     type: integer
                     example: 120
+  /users/current:
+    get:
+      tags:
+        - users
+      summary: get detailed info about user
+      description: ''
+      operationId: getUser
+      security: 
+        - bearerAuth: []
+      responses:
+        '200':
+          description: return user info object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+        '401':
+          description: unathorized
+        '404':
+          description: user not found
   /water/:
     post:
       tags:
@@ -335,6 +355,46 @@ components:
         password:
           type: string
           example: 'JSD78jfk*hjd'
+    UserFull:
+      required:
+        - email
+        - dailyNorma
+      type: object
+      properties:
+        email:
+          type: string
+          example: yourmail@mail.com
+        name:
+          type: string
+          example: 'Nadia'
+          default: null
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+        avatar:
+          type: string
+          example: "https://res.cloudinary.com/dmo99evjz/image/upload/v1719002738/6675e4fde4b76438a11b4ea4.jpg"
+        weight:
+          type: integer
+          default: null
+          example: 59
+        timeActivity:
+          type: integer
+          default: null
+          example: 2
+        dailyNorma:
+          type: integer
+          default: 2000
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-06-21T20:39:25.511+00:00"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-06-22T20:39:25.511+00:00"
     Water:
       type: object
       properties:

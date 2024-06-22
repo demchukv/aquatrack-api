@@ -16,10 +16,12 @@ export const current = async (req, res, next) => {
       email: user.email,
       name: user.name,
       avatar: user.avatar,
-      sex: user.sex,
+      gender: user.gender,
       weight: user.weight,
-      timeInSport: user.timeInSport,
-      waterPerDay: user.waterPerDay,
+      timeActivity: user.timeActivity,
+      dailyNorma: user.dailyNorma,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     });
   } catch (error) {
     console.error(error);

@@ -32,6 +32,27 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Email is required'],
       unique: true,
     },
+    name: {
+      type: String,
+      default: null,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      default: null,
+    },
+    weight: {
+      type: Number,
+      default: null,
+    },
+    timeActivity: {
+      type: Number,
+      default: null,
+    },
+    dailyNorma: {
+      type: Number,
+      default: 2000,
+    },
     token: {
       type: String,
       default: null,
