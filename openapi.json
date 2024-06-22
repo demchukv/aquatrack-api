@@ -154,6 +154,44 @@
         }
       }
     },
+    "/auth/refresh": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Refresh user token",
+        "description": "",
+        "operationId": "refreshToken",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized!"
+          }
+        }
+      }
+    },
     "/auth/verify": {
       "post": {
         "tags": [
@@ -201,7 +239,7 @@
       }
     },
     "/auth/verify/{verificationToken}": {
-      "get": {
+      "post": {
         "tags": [
           "auth"
         ],
