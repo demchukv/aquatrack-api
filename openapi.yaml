@@ -191,6 +191,62 @@ paths:
           description: unathorized
         '404':
           description: user not found
+    patch:
+      tags:
+        - users
+      summary: update user profile
+      description: ''
+      operationId: updateUser
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+        '400':
+          description: Bad request
+        '401':
+          description: unathorized
+        '404':
+          description: user not found
+  /users/avatar:
+    patch:
+      tags:
+        - users
+      summary: upload user avatar
+      description: ''
+      operationId: uploadAvatar
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatar:
+                    type: string
+                    example: "https://res.cloudinary.com/dmo99evjz/image/upload/v1719002738/6675e4fde4b76438a11b4ea4.jpg"
+        '400':
+          description: Bad request
+        '401':
+          description: Not authorized
   /water/:
     post:
       tags:
@@ -395,6 +451,35 @@ components:
           type: string
           format: date-time
           example: "2024-06-22T20:39:25.511+00:00"
+    UserUpdate:
+      required:
+        - email
+        - dailyNorma
+      type: object
+      properties:
+        email:
+          type: string
+          example: yourmail@mail.com
+        name:
+          type: string
+          example: 'Nadia'
+          default: null
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+        weight:
+          type: integer
+          default: null
+          example: 59
+        timeActivity:
+          type: integer
+          default: null
+          example: 2
+        dailyNorma:
+          type: integer
+          default: 2000
     Water:
       type: object
       properties:
