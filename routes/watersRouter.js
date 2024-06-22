@@ -26,13 +26,13 @@ waterRouter.delete(
   waterController.deleteWaterTracker
 );
 
-waterRouter.get(
+waterRouter.post(
   '/day',
   validateBody(schemas.getWaterTracker),
   waterController.getWaterTrackerByDay
 );
 
-waterRouter.get(
+waterRouter.post(
   '/month',
   validateBody(schemas.getWaterTracker),
   waterController.getWaterTrackerByMonth

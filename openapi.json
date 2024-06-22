@@ -269,6 +269,252 @@
           }
         }
       }
+    },
+    "/water/": {
+      "post": {
+        "tags": [
+          "water"
+        ],
+        "summary": "add new water for tracking",
+        "description": "",
+        "operationId": "addWater",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "object with date in ISO format and volume of water",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Water"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "return object with added water",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "not valid data"
+          },
+          "401": {
+            "description": "unathuorized"
+          }
+        }
+      }
+    },
+    "/water/{id}": {
+      "put": {
+        "tags": [
+          "water"
+        ],
+        "summary": "update track record",
+        "description": "",
+        "operationId": "updateWater",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "objectID for tracked water",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "object with date in ISO format and volume of water",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Water"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "return object with added water",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterFull"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "not valid data"
+          },
+          "401": {
+            "description": "unathuorized"
+          },
+          "404": {
+            "description": "tracker record not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "water"
+        ],
+        "summary": "delete track record",
+        "description": "",
+        "operationId": "deleteWater",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "objectID for tracked water",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "record deleted"
+          },
+          "400": {
+            "description": "not valid data"
+          },
+          "401": {
+            "description": "unathuorized"
+          },
+          "404": {
+            "description": "tracker record not found"
+          }
+        }
+      }
+    },
+    "/water/day": {
+      "post": {
+        "tags": [
+          "water"
+        ],
+        "summary": "obtaining data on the water consumed by the user for the day",
+        "description": "",
+        "operationId": "getDayWater",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "date in ISO format",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-06-22T07:05:49"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterFull"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "not valid data"
+          },
+          "401": {
+            "description": "unathuorized"
+          }
+        }
+      }
+    },
+    "/water/month": {
+      "post": {
+        "tags": [
+          "water"
+        ],
+        "summary": "obtaining data on the water consumed by the user for a month",
+        "description": "",
+        "operationId": "getMonthWater",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "date in ISO format",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-06-22T07:05:49"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterFull"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "not valid data"
+          },
+          "401": {
+            "description": "unathuorized"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -283,6 +529,45 @@
           "password": {
             "type": "string",
             "example": "JSD78jfk*hjd"
+          }
+        }
+      },
+      "Water": {
+        "type": "object",
+        "properties": {
+          "ampunt": {
+            "type": "integer",
+            "example": "250"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-06-22T10:30"
+          }
+        }
+      },
+      "WaterFull": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer",
+            "example": "250"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "024-06-22T07:05:49.534Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "024-06-22T07:05:49.534Z"
           }
         }
       }

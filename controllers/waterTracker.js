@@ -11,6 +11,7 @@ export const createWaterTracker = async (req, res, next) => {
       date,
     });
     res.status(201).json(newWaterTracker);
+    
   } catch (error) {
     console.log(error);
     res.status(500);
