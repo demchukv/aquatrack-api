@@ -79,6 +79,14 @@ const userSchema = new mongoose.Schema(
       default: null,
       required: [true, 'Verify token is required'],
     },
+    googleId: {
+      type: String,
+      default: null
+    },
+    displayName: {
+      type: String,
+      default: null
+    }
   },
   {
     versionKey: false,
