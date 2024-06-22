@@ -15,8 +15,8 @@ import watersRouter from './routes/watersRouter.js';
 import swaggerUi from 'swagger-ui-express';
 
 import swaggerDocument from './openapi.json' assert { type: 'json' };
-import { access } from 'fs';
-import { profile } from 'console';
+
+import cookieParser from 'cookie-parser';
 
 // google auth --------------------------
 import passport from 'passport';
@@ -35,6 +35,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);

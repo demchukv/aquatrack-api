@@ -127,7 +127,7 @@ paths:
         '404':
           description: 'User not found'
   /auth/verify/{verificationToken}:
-    post:
+    get:
       tags:
         - auth
       summary: Verify user email

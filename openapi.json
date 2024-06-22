@@ -201,7 +201,7 @@
       }
     },
     "/auth/verify/{verificationToken}": {
-      "post": {
+      "get": {
         "tags": [
           "auth"
         ],
