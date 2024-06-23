@@ -13,6 +13,12 @@ export const loginSchema = Joi.object({
   password: Joi.string().min(8).required(),
 });
 
+export const resetSchema = Joi.object({
+  password: Joi.string().min(8).required(),
+  repeatPassword: Joi.string().min(8).required(),
+  resetToken: Joi.string().required(),
+});
+
 export const emailSchema = Joi.object({
   email: Joi.string().email().required(),
 });
