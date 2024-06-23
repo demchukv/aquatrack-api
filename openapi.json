@@ -909,7 +909,7 @@
       "Water": {
         "type": "object",
         "properties": {
-          "ampunt": {
+          "amount": {
             "type": "integer",
             "example": "250"
           },
