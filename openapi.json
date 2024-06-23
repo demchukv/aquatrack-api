@@ -284,14 +284,118 @@
       "get": {
         "tags": [
           "auth"
-        ]
-      },
-      "summary": "send user to Google for authorization",
-      "description": "",
-      "operationId": "google",
-      "responses": {
-        "302": {
-          "description": "redirect to Google"
+        ],
+        "summary": "redirect user to Google oauth2 service for authorization",
+        "description": "Past this URL in href attribute to tag a",
+        "operationId": "google",
+        "responses": {
+          "302": {
+            "description": "redirect to Google"
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "send email to user with reset password link",
+        "description": "",
+        "operationId": "forgotPassword",
+        "requestBody": {
+          "description": "User email",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Reset password email sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "reset user password",
+        "description": "",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "description": "User password and reset token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "resetToken": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "repeatPassword": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password successfully changed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "User not found"
+          }
         }
       }
     },

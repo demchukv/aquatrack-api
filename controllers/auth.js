@@ -1,4 +1,5 @@
 import { User } from '../models/user.js';
+import { ResetPassword } from '../models/pass-reset-model.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import HttpError from '../middlewares/HttpError.js';
@@ -217,8 +218,11 @@ const googleRedirect = async (req, res, next) => {
       displayName: userData.data.name,
     });
     await newUser.save();
-  }else{
-    await User.findOneAndUpdate({email}, {displayName: userData.data.name, googleId})
+  } else {
+    await User.findOneAndUpdate(
+      { email },
+      { displayName: userData.data.name, googleId }
+    );
   }
 
   const userDB = await User.findOne({ email });
@@ -233,9 +237,7 @@ const googleRedirect = async (req, res, next) => {
     httpOnly: true,
   });
 
-  return res.redirect(
-    `${process.env.FRONTEND_URL}?token=${token}`
-  );
+  return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
 
   /**
    *   data: {
@@ -248,8 +250,77 @@ const googleRedirect = async (req, res, next) => {
         picture: 'https://lh3.googleusercontent.com/a/ACg8ocL6Zx4vL9iqY0wD_Hr1sHYyaPgqXt_RWEIcQNcQ0sUi30HNEJjf6A=s96-c'
     }
   */
-
 };
+
+const sendResetPasswordEmail = async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(HttpError(404, 'User not found'));
+  }
+
+  const isResetPassword = await ResetPassword.findOne({ userId: user._id });
+
+  let isResetToken = false;
+  let resetToken = '';
+  if (isResetPassword) {
+    const resetPassData = tokenServices.validateAccessToken(isResetPassword.resetToken);
+    if(resetPassData) {
+      resetToken = isResetPassword.resetToken;
+      isResetToken = true;
+    }else{
+      await ResetPassword.deleteOne({ userId: user._id });
+    }
+  }
+
+  if(!isResetToken) {
+    const payload = { id: user._id, email: user.email };
+    resetToken = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '15m',});
+    await ResetPassword.create({ userId: user._id, resetToken });
+  }
+  
+  const resetPasswordData = {
+    to: user.email,
+    subject: 'Reset password',
+    html: `<h1>Please reset your password</h1>
+    <p><a target="_blank" href="${process.env.FRONTEND_URL}/reset-password/${resetToken}">Click reset password</a></p>`,
+  };
+  await sendEmail(resetPasswordData);
+  res.json({ message: 'Reset password email sent' });
+};
+
+const resetPassword = async (req, res, next) => {
+  const { password, repeatPassword, resetToken } = req.body;
+
+  if(!password || !repeatPassword || !resetToken) {
+    return next(HttpError(400, 'All fields are required'));
+  }
+  if(password !== repeatPassword) {
+    return next(HttpError(400, 'Passwords do not match'));
+  }
+
+  const payload = tokenServices.validateAccessToken(resetToken);
+  if(!payload){
+    return next(HttpError(401, 'Invalid token'));
+  }
+
+  const resetData = await ResetPassword.findOne({ resetToken });
+  if (!resetData) {
+    return next(HttpError(401, 'Invalid token'));
+  }
+
+  const user = await User.findOne({ _id: resetData.userId });
+  if (!user) {
+    return next(HttpError(404, 'User not found'));
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+  await ResetPassword.deleteOne({ resetToken });
+  res.json({ message: 'Password successfully changed' });
+
+}
 
 export {
   register,
@@ -260,4 +331,6 @@ export {
   refresh,
   googleAuth,
   googleRedirect,
+  sendResetPasswordEmail,
+  resetPassword,
 };
