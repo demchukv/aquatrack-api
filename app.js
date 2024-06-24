@@ -27,10 +27,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(morgan('tiny'));
 app.use(cors({
   credentials: true,
-  origin: [process.env.FRONTEND_URI, 'http://localhost:3000', 'http://localhost:5173'],
+  origin: '*',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 200,
 }));
 app.use(express.json());
 app.use(cookieParser());
