@@ -13,8 +13,9 @@ import usersRouter from './routes/usersRouter.js';
 import watersRouter from './routes/watersRouter.js';
 
 import swaggerUi from 'swagger-ui-express';
-
 import swaggerDocument from './openapi.json' assert { type: 'json' };
+
+import cookieParser from 'cookie-parser';
 
 const uploadDir = path.join(process.cwd(), 'tmp');
 const storeAvatar = path.join(process.cwd(), 'public', 'avatars');
@@ -26,6 +27,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);
@@ -45,7 +47,7 @@ app.use((err, _, res, __) => {
 const PORT = process.env.PORT || 8080;
 const uriDb = process.env.DB_HOST;
 
-const connection = mongoose.connect(uriDb);
+const connection = mongoose.connect(uriDb, {});
 
 connection
   .then(() => {
