@@ -821,6 +821,9 @@
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string"
+          },
           "email": {
             "type": "string",
             "example": "yourmail@mail.com"

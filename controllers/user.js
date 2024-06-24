@@ -11,9 +11,10 @@ export const current = async (req, res, next) => {
   const { id } = req.user;
   
   try {
-    const user = await User.findOne(id);
+    const user = await User.findById(id);
     
     res.json({
+      id: user._id,
       email: user.email,
       name: user.name,
       avatar: user.avatar,
@@ -103,6 +104,7 @@ export const updateProfile = async (req, res, next) => {
     }
     );
     res.json({
+      id: updatedUser._id,
       email: updatedUser.email,
       name: updatedUser.name,
       avatar: updatedUser.avatar,
