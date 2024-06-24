@@ -4,7 +4,7 @@ import { User } from '../models/user.js';
 import HttpError from '../middlewares/HttpError.js';
 
 export const generateToken = async (payload) => {
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5m' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
 
     return {
