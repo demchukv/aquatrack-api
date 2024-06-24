@@ -70,7 +70,6 @@ const logIn = async (req, res, next) => {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: 'none',
-      secure: true,
     });
     // res.send();
     res.status(200).send({ token, user: { email: user.email } });
