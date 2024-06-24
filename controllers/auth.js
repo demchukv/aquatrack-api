@@ -49,12 +49,12 @@ const logIn = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user === null) {
-      next(HttpError(401, 'Email or password is wrong!'));
+      next(HttpError(409, 'Email or password is wrong!'));
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      next(HttpError(401, 'Email or password is wrong!'));
+      next(HttpError(409, 'Email or password is wrong!'));
     }
 
     if (user.verify === false) {
