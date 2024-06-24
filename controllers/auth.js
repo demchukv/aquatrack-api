@@ -147,7 +147,6 @@ const refresh = async (req, res, next) => {
   const { refreshToken } = req.cookies;
   console.log("===================================================================");
   console.log("Cookies: ", req.cookies);
-  console.log("Cookies: ", req);
   console.log("===================================================================");
 
   if (!refreshToken) {
