@@ -25,12 +25,7 @@ const app = express();
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(morgan('tiny'));
-app.use(cors({
-  credentials: true,
-  origin: '*',
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  optionsSuccessStatus: 200,
-}));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
