@@ -107,8 +107,8 @@ const verifyEmail = async (req, res, next) => {
     });
     // res.json({
     //   message: 'Verification successful',
-    // });
-    res.redirect(process.env.FRONTEND_URI);
+    // }); 
+    return res.redirect(`${process.env.FRONTEND_URI}/signin?email-verified`);
   } catch (error) {
     console.error(error);
     next(error);
