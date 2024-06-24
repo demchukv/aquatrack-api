@@ -71,7 +71,6 @@ const logIn = async (req, res, next) => {
       httpOnly: true,
       sameSite: 'none',
     });
-    res.send();
     res.status(200).send({ token, user: { email: user.email } });
   } catch (error) {
     console.log(error);
