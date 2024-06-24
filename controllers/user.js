@@ -9,9 +9,10 @@ const storeAvatar = path.join(process.cwd(), 'public', 'avatars');
 
 export const current = async (req, res, next) => {
   const { id } = req.user;
+  
   try {
     const user = await User.findOne(id);
-
+    
     res.json({
       email: user.email,
       name: user.name,
