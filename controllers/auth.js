@@ -143,7 +143,9 @@ const resendVerifyEmail = async (req, res, next) => {
 
 const refresh = async (req, res, next) => {
   const { refreshToken } = req.cookies;
-  console.log(req.cookies);
+  console.log("===================================================================");
+  console.log("Cookies: ", req.cookies);
+  console.log("===================================================================");
 
   if (!refreshToken) {
     next(HttpError(401, 'Not authorized'));
