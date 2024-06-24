@@ -71,6 +71,11 @@ const logIn = async (req, res, next) => {
       httpOnly: true,
     });
 
+    req.cookie('refreshToken', refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+
     res.status(200).send({ token, user: { email: user.email } });
   } catch (error) {
     console.log(error);
