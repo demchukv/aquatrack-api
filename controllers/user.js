@@ -8,9 +8,9 @@ import CloudinaryUploadImage from '../helpers/cloudinary.js';
 const storeAvatar = path.join(process.cwd(), 'public', 'avatars');
 
 export const current = async (req, res, next) => {
-  const { _id } = req.user;
+  const { id } = req.user;
   try {
-    const user = await User.findOne(_id);
+    const user = await User.findOne(id);
 
     res.json({
       email: user.email,
