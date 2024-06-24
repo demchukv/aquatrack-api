@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { RefreshToken } from '../models/token-model.js';
 import { User } from '../models/user.js';
-import { HttpError } from '../middlewares/HttpError.js';
+import HttpError from '../middlewares/HttpError.js';
 
 export const generateToken = async (payload) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '20m' });
