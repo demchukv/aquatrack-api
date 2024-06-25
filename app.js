@@ -25,7 +25,17 @@ const app = express();
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(morgan('tiny'));
-app.use(cors());
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Headers', true);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  next();
+});
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -33,6 +43,7 @@ app.use(express.static('public'));
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/water', auth, watersRouter);
+
 
 app.use((_, res) => {
   res.status(404).json({ message: 'Route not found' });
