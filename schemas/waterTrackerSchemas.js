@@ -5,6 +5,11 @@ export const waterTrackerSchema = Joi.object({
   amount: Joi.number().integer().min(1).max(5000).required(),
 });
 
-export const getWaterTracker = Joi.object({
-  date: Joi.date().required(),
+export const getPerDayWaterTracker = Joi.object({
+  date: Joi.date().iso().required(),
+});
+
+export const getPerMonthWaterTracker = Joi.object({
+  startDate: Joi.date().required(),
+  endDate: Joi.date().required(),
 });
