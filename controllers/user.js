@@ -9,7 +9,7 @@ const storeAvatar = path.join(process.cwd(), 'public', 'avatars');
 
 export const current = async (req, res, next) => {
   const { id } = req.user;
-  console.log(req.cookies);
+  
   try {
     const user = await User.findById(id);
     

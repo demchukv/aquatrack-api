@@ -4,7 +4,7 @@ import { User } from '../models/user.js';
 import HttpError from '../middlewares/HttpError.js';
 
 export const generateToken = async (payload) => {
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30m' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
 
     return {
@@ -20,7 +20,7 @@ export const saveToken = async (userId, refreshToken) => {
         return tokenData.save();
     }
     const token = await RefreshToken.create({ userId, refreshToken });
-    
+
     return token;
 }
 
@@ -49,7 +49,7 @@ const validateRefreshToken = (token) => {
 }
 
 const findToken = async (refreshToken) => {
-    const tokenData = await RefreshToken.findOne({ refreshToken });
+    const tokenData = await RefreshToken.findOne({ refreshToken:refreshToken });
     return tokenData;
 }
 

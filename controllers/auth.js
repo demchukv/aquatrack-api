@@ -66,12 +66,16 @@ const logIn = async (req, res, next) => {
 
     await User.findByIdAndUpdate(user._id, { token }, { new: true });
 
-    res.cookie('refreshToken', refreshToken, {
+    res
+    .cookie('refreshToken', refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: 'none',
-    });
-    res.status(200).send({ token, user: { email: user.email } });
+      sameSite: 'lax',
+      secure: false
+    })
+    .status(200)
+    .send({ token, user: { email: user.email } });
+
   } catch (error) {
     console.log(error);
     next(error);
@@ -108,7 +112,7 @@ const verifyEmail = async (req, res, next) => {
     // res.json({
     //   message: 'Verification successful',
     // }); 
-    return res.redirect(`${process.env.FRONTEND_URI}/signin?email-verified`);
+    return res.redirect(`${process.env.FRONTEND_URL}/signin?email-verified`);
   } catch (error) {
     console.error(error);
     next(error);
@@ -143,22 +147,22 @@ const resendVerifyEmail = async (req, res, next) => {
 
 const refresh = async (req, res, next) => {
   const { refreshToken } = req.cookies;
-  console.log("===================================================================");
-  console.log("Cookies: ", req.cookies);
-  console.log("===================================================================");
 
   if (!refreshToken) {
-    next(HttpError(401, 'Not authorized'));
+    return res.status(401).json({ message: 'Not authorized' });
   }
 
   const userData = await tokenServices.refresh(refreshToken);
-  res.cookie('refreshToken', userData.refreshToken, {
+
+  res
+  .cookie('refreshToken', userData.refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-  });
-  return res
-    .status(200)
-    .send({ token: userData.token, user: { email: userData.user.email } });
+    sameSite: 'lax',
+    secure: false
+})
+  .status(200)
+    .send({ token: userData.token, user: { email: userData.email } });
 };
 
 const googleAuth = async (req, res, next) => {
