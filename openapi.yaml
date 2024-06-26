@@ -37,8 +37,10 @@ paths:
                   example: "yourname@mail.com"
                 password:
                   type: string
+                  example: "m$vpshdYhd"
                 repeatPassword:
                   type: string
+                  example: "m$vpshdYhd"
       responses:
         '201':
           description: Successful operation
@@ -369,7 +371,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WaterFull'
+                $ref: '#/components/schemas/Water'
         '400':
           description: not valid data
         '401':
@@ -402,7 +404,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WaterFull'
+                $ref: '#/components/schemas/Water'
         '400':
           description: not valid data
         '401':

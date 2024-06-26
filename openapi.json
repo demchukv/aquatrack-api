@@ -50,10 +50,12 @@
                     "example": "yourname@mail.com"
                   },
                   "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "m$vpshdYhd"
                   },
                   "repeatPassword": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "m$vpshdYhd"
                   }
                 }
               }
@@ -581,7 +583,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WaterFull"
+                  "$ref": "#/components/schemas/Water"
                 }
               }
             }
@@ -635,7 +637,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WaterFull"
+                  "$ref": "#/components/schemas/Water"
                 }
               }
             }
