@@ -14,7 +14,7 @@ const cookieConfig = {
   maxAge: 30 * 24 * 60 * 60 * 1000,
   httpOnly: true,
   sameSite: 'none',
-  secure: false
+  secure: true
 };
 
 const register = async (req, res, next) => {
