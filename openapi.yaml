@@ -462,7 +462,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/WaterFull'
+                  $ref: '#/components/schemas/WaterDaily'
         '400':
           description: not valid data
         '401':
@@ -484,10 +484,14 @@ paths:
             schema:
               type: object
               properties:
-                date:
+                startDate:
                   type: string
                   format: date-time
-                  example: "2024-06-22T07:05:49"
+                  example: "2024-06-01"
+                endtDate:
+                  type: string
+                  format: date-time
+                  example: "2024-06-31"
       responses:
         '200':
           description: Successfull operation
@@ -496,7 +500,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/WaterFull'
+                  $ref: '#/components/schemas/WaterMonth'
         '400':
           description: not valid data
         '401':
@@ -593,7 +597,7 @@ components:
           type: string
           format: date-time
           example: '2024-06-22T10:30'
-    WaterFull:
+    WaterDaily:
       type: object
       properties:
         _id:
@@ -611,6 +615,19 @@ components:
           type: string
           format: date-time
           example: "024-06-22T07:05:49.534Z"
+    WaterMonth:
+      type: object
+      properties:
+        totalAmount: 
+          type: integer
+          example: '250'
+        percentageOfNorma:
+          type: number
+          example: "85.5"
+        date:
+          type: string
+          format: date
+          example: "2024-06-22"
   securitySchemes:
     bearerAuth:
       type: 'http'

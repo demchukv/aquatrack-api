@@ -10,6 +10,13 @@ import queryString from 'query-string';
 
 const { JWT_SECRET } = process.env;
 
+const cookieConfig = {
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  sameSite: 'lax',
+  secure: false
+};
+
 const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -67,12 +74,7 @@ const logIn = async (req, res, next) => {
     await User.findByIdAndUpdate(user._id, { token }, { new: true });
 
     res
-    .cookie('refreshToken', refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: false
-    })
+    .cookie('refreshToken', refreshToken, cookieConfig)
     .status(200)
     .send({ token, user: { email: user.email } });
 
@@ -240,10 +242,7 @@ const googleRedirect = async (req, res, next) => {
 
   await User.findByIdAndUpdate(userDB._id, { token }, { new: true });
 
-  res.cookie('refreshToken', refreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-  });
+  res.cookie('refreshToken', refreshToken, cookieConfig);
 
   return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
 
