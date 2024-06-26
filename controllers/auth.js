@@ -13,7 +13,7 @@ const { JWT_SECRET } = process.env;
 const cookieConfig = {
   maxAge: 30 * 24 * 60 * 60 * 1000,
   httpOnly: true,
-  sameSite: 'lax',
+  sameSite: 'none',
   secure: false
 };
 
