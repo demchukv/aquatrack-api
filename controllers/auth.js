@@ -155,12 +155,16 @@ const refresh = async (req, res, next) => {
   }
 
   const userData = await tokenServices.refresh(refreshToken);
+  if(!userData) {
+    res.clearCookie('refreshToken').status(401).json({ message: 'Not authorized' });
+  }
 
   res
   .cookie('refreshToken', userData.refreshToken, cookieConfig)
   .status(200)
   .send({ token: userData.token, user: { email: userData.email } });
 };
+
 
 const googleAuth = async (req, res, next) => {
   const stringifiedParams = queryString.stringify({

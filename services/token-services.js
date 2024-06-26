@@ -58,7 +58,8 @@ export const refresh = async (checkRefreshToken) => {
     const tokenFromDb = await findToken(checkRefreshToken);
 
     if(!userData || !tokenFromDb) {
-        return HttpError(401, 'Unauthorized');
+        //return HttpError(401, 'Unauthorized');
+        return false;
     }
     const user = await User.findById(userData.id);
     const payload = { id: user._id, email: user.email };
