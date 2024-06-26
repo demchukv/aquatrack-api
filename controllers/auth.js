@@ -157,14 +157,9 @@ const refresh = async (req, res, next) => {
   const userData = await tokenServices.refresh(refreshToken);
 
   res
-  .cookie('refreshToken', userData.refreshToken, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: false
-})
+  .cookie('refreshToken', userData.refreshToken, cookieConfig)
   .status(200)
-    .send({ token: userData.token, user: { email: userData.email } });
+  .send({ token: userData.token, user: { email: userData.email } });
 };
 
 const googleAuth = async (req, res, next) => {
