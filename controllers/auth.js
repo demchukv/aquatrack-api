@@ -89,9 +89,9 @@ const logOut = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.user.id, { token: null }, { new: true });
     await tokenServices.removeToken(refreshToken);
-    res.clearCookie('refreshToken');
-
-    res.status(204).end();
+    res
+    .clearCookie('refreshToken')
+    .status(204).end();
   } catch (error) {
     console.log(error);
     next(error);
