@@ -156,7 +156,10 @@ const refresh = async (req, res, next) => {
 
   const userData = await tokenServices.refresh(refreshToken);
   if(!userData) {
-    res.clearCookie('refreshToken').status(401).json({ message: 'Not authorized' });
+    return res
+    .clearCookie('refreshToken')
+    .status(401)
+    .json({ message: 'Not authorized' });
   }
 
   res
