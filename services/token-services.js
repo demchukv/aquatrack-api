@@ -58,8 +58,6 @@ export const refresh = async (checkRefreshToken) => {
     const tokenFromDb = await findToken(checkRefreshToken);
 
     if(!userData || !tokenFromDb) {
-        // throw new Error('Unauthorized');
-        res.clearCookie('refreshToken');
         return HttpError(401, 'Unauthorized');
     }
     const user = await User.findById(userData.id);

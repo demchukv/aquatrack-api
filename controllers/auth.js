@@ -237,9 +237,9 @@ const googleRedirect = async (req, res, next) => {
 
   await User.findByIdAndUpdate(userDB._id, { token }, { new: true });
 
-  res.cookie('refreshToken', refreshToken, cookieConfig);
-
-  return res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+  return res
+  .cookie('refreshToken', refreshToken, cookieConfig)
+  .redirect(`${process.env.FRONTEND_URL}?token=${token}`);
 
   /**
    *   data: {
