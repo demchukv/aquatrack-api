@@ -65,7 +65,7 @@ const logIn = async (req, res, next) => {
     }
 
     if (user.verify === false) {
-      next(HttpError(401, 'Please verify your mail!'));
+      next(HttpError(400, 'Please verify your mail!'));
     }
     const payload = { id: user._id, email: user.email };
     const { token, refreshToken } = await tokenServices.generateToken(payload);
