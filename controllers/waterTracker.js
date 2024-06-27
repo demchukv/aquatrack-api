@@ -92,6 +92,12 @@ export const getWaterTrackerByMonth = async (req, res, next) => {
 
   periodEnd.setUTCHours(23, 59, 59, 999);
 
+  if (periodStart > periodEnd) {
+    return res.status(400).json({
+      message: 'Start date is greater than end date',
+    });
+  }
+
   try {
     const { dailyNorma } = await User.findById(id);
 
