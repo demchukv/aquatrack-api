@@ -246,7 +246,7 @@ const googleRedirect = async (req, res, next) => {
 
   return res
   .cookie('refreshToken', refreshToken, cookieConfig)
-  .redirect(`${process.env.FRONTEND_URL}?token=${token}`);
+  .redirect(`${process.env.FRONTEND_URL}/?token=${token}`);
 
   /**
    *   data: {
@@ -266,7 +266,7 @@ const sendResetPasswordEmail = async (req, res, next) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return next(HttpError(404, 'User not found'));
+    return next(HttpError(404, 'User not found!'));
   }
 
   const isResetPassword = await ResetPassword.findOne({ userId: user._id });
@@ -303,31 +303,31 @@ const resetPassword = async (req, res, next) => {
   const { password, repeatPassword, resetToken } = req.body;
 
   if(!password || !repeatPassword || !resetToken) {
-    return next(HttpError(400, 'All fields are required'));
+    return next(HttpError(400, 'All fields are required!'));
   }
   if(password !== repeatPassword) {
-    return next(HttpError(400, 'Passwords do not match'));
+    return next(HttpError(400, 'Passwords do not match!'));
   }
 
   const payload = tokenServices.validateAccessToken(resetToken);
   if(!payload){
-    return next(HttpError(401, 'Invalid token'));
+    return next(HttpError(401, 'Invalid token!'));
   }
 
   const resetData = await ResetPassword.findOne({ resetToken });
   if (!resetData) {
-    return next(HttpError(401, 'Invalid token'));
+    return next(HttpError(401, 'Invalid token!'));
   }
 
   const user = await User.findOne({ _id: resetData.userId });
   if (!user) {
-    return next(HttpError(404, 'User not found'));
+    return next(HttpError(404, 'User not found!'));
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   await User.findByIdAndUpdate(user._id, { password: hashedPassword });
   await ResetPassword.deleteOne({ resetToken });
-  res.json({ message: 'Password successfully changed' });
+  res.json({ message: 'Password successfully changed!' });
 
 }
 

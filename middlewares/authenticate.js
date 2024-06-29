@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { User } from '../models/user.js';
 import HttpError from './HttpError.js';
 import * as tokenServices from '../services/token-services.js';
@@ -37,6 +36,7 @@ async function auth(req, res, next) {
 
       next();
     } catch (error) {
+      console.log(error);
       next(error);
     }
   
