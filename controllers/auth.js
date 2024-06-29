@@ -44,6 +44,7 @@ const register = async (req, res, next) => {
     await sendEmail(verifyEmailData);
 
     res.status(201).send({ user: { email: newUser.email } });
+
   } catch (error) {
     console.log(error);
     next(error);
@@ -73,7 +74,7 @@ const logIn = async (req, res, next) => {
 
     await User.findByIdAndUpdate(user._id, { token }, { new: true });
 
-    res
+    return res
     .cookie('refreshToken', refreshToken, cookieConfig)
     .status(200)
     .send({ token, user: { email: user.email } });
@@ -89,9 +90,10 @@ const logOut = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.user.id, { token: null }, { new: true });
     await tokenServices.removeToken(refreshToken);
-    res
+    return res
     .clearCookie('refreshToken')
     .status(204).end();
+
   } catch (error) {
     console.log(error);
     next(error);
@@ -115,6 +117,7 @@ const verifyEmail = async (req, res, next) => {
     //   message: 'Verification successful',
     // }); 
     return res.redirect(`${process.env.FRONTEND_URL}/signin?email-verified`);
+
   } catch (error) {
     console.error(error);
     next(error);
@@ -139,7 +142,9 @@ const resendVerifyEmail = async (req, res, next) => {
   const verifyEmailData = {
     to: user.email,
     subject: 'Verify email',
-    html: `<h1>Please verify your email</h1><p><a target="_blank" href="${process.env.BASE_URI}/api/auth/verify/${user.verificationToken}">Click verify email</a></p>`,
+    html: `<h1>Please verify your email</h1>
+    <p><a target="_blank" href="${process.env.BASE_URI}/api/auth/verify/${user.verificationToken}">Click verify email</a>
+    </p>`,
   };
 
   await sendEmail(verifyEmailData);
@@ -162,7 +167,7 @@ const refresh = async (req, res, next) => {
     .json({ message: 'Not authorized' });
   }
 
-  res
+  return res
   .cookie('refreshToken', userData.refreshToken, cookieConfig)
   .status(200)
   .send({ token: userData.token, user: { email: userData.email } });

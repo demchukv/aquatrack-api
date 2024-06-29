@@ -29,6 +29,11 @@ export const updateWaterTracker = async (req, res, next) => {
       { amount, date },
       { new: true }
     );
+
+    if (!updatedWaterTracker) {
+      res.status(404).end();
+    }
+
     res.json(updatedWaterTracker);
   } catch (error) {
     console.log(error);
@@ -68,7 +73,7 @@ export const getWaterTrackerByDay = async (req, res, next) => {
     const result = await WaterTracker.find(query);
 
     if (!result) {
-      res.status(404);
+      res.status(404).end();
     }
 
     res.json(result);
@@ -86,6 +91,12 @@ export const getWaterTrackerByMonth = async (req, res, next) => {
   const periodEnd = new Date(endDate);
 
   periodEnd.setUTCHours(23, 59, 59, 999);
+
+  if (periodStart > periodEnd) {
+    return res.status(400).json({
+      message: 'Start date is greater than end date',
+    });
+  }
 
   try {
     const { dailyNorma } = await User.findById(id);
@@ -137,7 +148,7 @@ export const getWaterTrackerByMonth = async (req, res, next) => {
     ]);
 
     if (!result) {
-      res.status(404);
+      res.status(404).end();
     }
 
     res.json(result);
