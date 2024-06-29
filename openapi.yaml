@@ -321,7 +321,7 @@ paths:
         '404':
           description: user not found
   /users/avatar:
-    patch:
+    post:
       tags:
         - users
       summary: upload user avatar

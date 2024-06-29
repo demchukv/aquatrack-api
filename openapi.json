@@ -506,7 +506,7 @@
       }
     },
     "/users/avatar": {
-      "patch": {
+      "post": {
         "tags": [
           "users"
         ],
