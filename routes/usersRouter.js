@@ -10,6 +10,6 @@ const userRouter = express.Router();
 userRouter.get("/count-users", ctrl.countUsers);
 userRouter.get("/current", auth, ctrl.current);
 userRouter.patch("/current", auth, validateBody(userValidateProfile), ctrl.updateProfile);
-userRouter.patch("/avatar", auth, upload.single("avatar"), ctrl.updateAvatar);
+userRouter.post("/avatar", auth, upload.single("avatar"), ctrl.updateAvatar);
 
 export default userRouter;
