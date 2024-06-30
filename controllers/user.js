@@ -12,7 +12,7 @@ export const current = async (req, res, next) => {
   
   try {
     const user = await User.findById(id);
-console.log(user);
+
     res.json({
       id: user._id,
       email: user.email,

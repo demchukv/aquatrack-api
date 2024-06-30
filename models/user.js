@@ -61,7 +61,7 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
     timeActivity: {
-      type: Number,
+      type: String,
       default: null,
     },
     dailyNorma: {
