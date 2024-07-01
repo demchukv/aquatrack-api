@@ -38,9 +38,6 @@ paths:
                 password:
                   type: string
                   example: "m$vpshdYhd"
-                repeatPassword:
-                  type: string
-                  example: "m$vpshdYhd"
       responses:
         '201':
           description: Successful operation
@@ -49,8 +46,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  email:
-                    type: string
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: "yourname@mail.com"
         '409':
           description: Email in use!
         '400':
@@ -153,33 +154,6 @@ paths:
                       example: "Verification email sent"
         '404':
           description: 'User not found'
-  /auth/verify/{verificationToken}:
-    post:
-      tags:
-        - auth
-      summary: Verify user email
-      description: ''
-      operationId: verify
-      parameters:
-        - name: verificationToken
-          in: path
-          description: 'Verification token sended in email'
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successfull operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Email verified"
-        '404':
-          description: User not found
   /auth/google:
     get:
       tags:
