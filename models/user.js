@@ -5,7 +5,7 @@ import gravatar from 'gravatar';
 export const registerSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
-  repeatPassword: Joi.string().min(8).required(),
+  // repeatPassword: Joi.string().min(8).required(),
 });
 
 export const loginSchema = Joi.object({
@@ -15,7 +15,7 @@ export const loginSchema = Joi.object({
 
 export const resetSchema = Joi.object({
   password: Joi.string().min(8).required(),
-  repeatPassword: Joi.string().min(8).required(),
+  // repeatPassword: Joi.string().min(8).required(),
   resetToken: Joi.string().required(),
 });
 
