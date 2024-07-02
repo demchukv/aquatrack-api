@@ -113,10 +113,10 @@ const verifyEmail = async (req, res, next) => {
       verify: true,
       verificationToken: null,
     });
-    res.json({
-      message: 'Verification successful',
-    }); 
-    // return res.redirect(`${process.env.FRONTEND_URL}/signin?email-verified`);
+    // res.json({
+    //   message: 'Verification successful',
+    // }); 
+    return res.redirect(`${process.env.FRONTEND_URL}/signin?email-verified`);
 
   } catch (error) {
     console.error(error);
