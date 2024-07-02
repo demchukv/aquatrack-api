@@ -78,12 +78,12 @@ const userSchema = new mongoose.Schema(
     },
     verify: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     verificationToken: {
       type: String,
       default: null,
-      required: [true, 'Verify token is required'],
+      required: [false, 'Verify token is required'],
     },
     googleId: {
       type: String,
