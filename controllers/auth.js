@@ -35,14 +35,14 @@ const register = async (req, res, next) => {
     });
     await newUser.setAvatarURL(email);
     await newUser.save();
-
+/*
     const verifyEmailData = {
       to: email,
       subject: 'Verify email',
       html: `<h1>Please verify your email</h1><p><a target="_blank" href="${process.env.BASE_URI}/api/auth/verify/${verificationToken}">Click verify email</a></p>`,
     };
     await sendEmail(verifyEmailData);
-
+*/
     res.status(201).send({ user: { email: newUser.email } });
 
   } catch (error) {
