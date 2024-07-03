@@ -307,11 +307,8 @@ const sendResetPasswordEmail = async (req, res, next) => {
 const resetPassword = async (req, res, next) => {
   const { password, repeatPassword, resetToken } = req.body;
 
-  if(!password || !repeatPassword || !resetToken) {
+  if(!password || !resetToken) {
     return next(HttpError(400, 'All fields are required!'));
-  }
-  if(password !== repeatPassword) {
-    return next(HttpError(400, 'Passwords do not match!'));
   }
 
   const payload = tokenServices.validateAccessToken(resetToken);
