@@ -130,6 +130,14 @@
                   }
                 }
               }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=sjkdfhskjdhfsjkdh; Path=/; HttpOnly"
+                }
+              }
             }
           },
           "401": {
@@ -163,6 +171,11 @@
         "tags": [
           "auth"
         ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Refresh user token",
         "description": "",
         "operationId": "refreshToken",
@@ -186,6 +199,14 @@
                       }
                     }
                   }
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=sjkdfhskjdhfsjkdh; Path=/; HttpOnly"
                 }
               }
             }
@@ -939,6 +960,11 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "refreshToken"
       }
     }
   }
