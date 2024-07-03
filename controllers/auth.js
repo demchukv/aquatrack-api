@@ -315,7 +315,7 @@ const resetPassword = async (req, res, next) => {
   if(!payload){
     return next(HttpError(401, 'Invalid token!'));
   }
-
+  
   const resetData = await ResetPassword.findOne({ resetToken });
   if (!resetData) {
     return next(HttpError(401, 'Invalid token!'));
